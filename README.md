@@ -1,7 +1,81 @@
 # ADO.NET-Notes
 Learn ADO.NET from scratch
 
-Create application using ASP.NET Core Empty template in Visual Studio 2022.
+**Create Database and Table in SQL Server**
+```
+CREATE DATABASE DiwaliGift
+GO
+USE DiwaliGift
+GO
+
+CREATE TABLE Employees (
+	EmployeeID int IDENTITY(1,1) NOT NULL  CONSTRAINT PK_Employees PRIMARY KEY,
+	Name varchar(30) NULL,
+	Phone varchar(20) NULL,
+	Email varchar(50) NULL,
+	Country varchar(20) NULL,
+	Age int NULL
+)
+GO
+```
+**Stored Procedures**
+```
+USE [DiwaliGift]
+GO
+CREATE OR ALTER PROCEDURE [dbo].[InsertTable_Employees]
+    @Name VARCHAR(50),
+    @Phone VARCHAR(50),
+    @Email VARCHAR(50),
+    @Country VARCHAR(50)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    IF EXISTS (
+        SELECT 1
+        FROM sys.tables
+        WHERE name = 'Employees'
+    )
+    BEGIN
+        INSERT INTO Employees (Name, Phone, Email, Country) 
+        VALUES (@Name, @Phone, @Email, @Country);
+    END
+END;
+```
+**Other Stored Procedures**
+```
+USE [DiwaliGift]
+GO
+ALTER PROC [dbo].[RandomAges]
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DECLARE @minAge INT = 20;
+    DECLARE @maxAge INT = 65;
+
+    UPDATE Employees
+    SET Age = @minAge + ABS(CHECKSUM(NEWID())) % (@maxAge - @minAge + 1);
+END;
+GO
+ALTER PROC [dbo].[usp_EmployeesAverageAge] 
+AS
+BEGIN
+	SELECT AVG(Age) FROM Employees
+END
+GO
+ALTER PROC [dbo].[usp_EmployeesAverageAgeByCountry] @country VARCHAR(50)
+AS
+BEGIN
+	SELECT AVG(Age) 'Average Age' FROM Employees GROUP BY Country HAVING Country = @country 
+END
+GO
+ALTER PROC [dbo].[usp_GetAverageAge] @averageAge DECIMAL(10,2) OUTPUT
+AS
+SELECT @averageAge = AVG(CAST(Age AS DECIMAL(10,2))) FROM Employees;
+GO
+```
+**Create application using ASP.NET Core Empty template in Visual Studio 2022.**
 
 - Solution name: AdoNetDemo
 - Project name: AdoNetDemo
