@@ -1,5 +1,8 @@
 # ADO.NET-Notes
-Learn ADO.NET from scratch
+Learn ADO.NET from scratch. The following code is taken from ASP.NET Core SDK version 8.0.
+
+ADO.NET Framework can be used for CRUD Operation with ASP.NET/ ASP.NET Core applications.
+Notes are attached as separate chapters.
 
 **Create Database and Table in SQL Server**
 ```
